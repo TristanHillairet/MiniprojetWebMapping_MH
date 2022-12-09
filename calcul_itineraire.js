@@ -12,5 +12,30 @@ var Stamen_Watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/w
 	ext: 'jpg'
 }).addTo(map);
 
-// fonctions des boutons
+// ajout des pokemons sur la carte
 
+fetch('calcul_itineraire.php', {
+	method: 'post',
+	body: JSON.stringify({["initialisation"] : true}) //Renvoi l'intégralité de la table pour faire tourner la fonction principale en analysant chacune des lignes
+})
+.then(results => results.json())
+.then(results => {
+	results.forEach(function (result) {
+		
+		let coord = result.coordinates;
+		let name = result.pokemon;
+
+		let div = document.createElement('div');
+		div.className = "button_recup";
+		let button = document.createElement('button');
+		button.innerText = 'Récupérer';
+		let text = document.createElement('p');
+		text.innerText = name;
+		div.append(text);
+		div.append(button);
+
+		L.marker(coord).addTo(groupmarker).bindPopup(div);
+	})
+})
+
+// fonctions d'écoute des boutons

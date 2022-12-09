@@ -1,0 +1,91 @@
+#test_carte {
+    font-family: 'Cairo', sans-serif;
+      
+    background: linear-gradient(to right, aliceblue, white) ;
+      
+    padding: 10px;
+    min-width: 100vh;
+    min-height: 98vh;
+    margin-left: 20px;
+    margin-right: 20px;
+    
+    display: grid;
+    grid-template-rows: 80px 600px 200px 30px;
+    grid-template-columns: 1fr 1fr 1fr; 
+}
+
+#titre {
+    display: block;
+    text-align: center;
+    grid-row: 1;
+    grid-column: 1/4;
+    border-radius: 5px;
+    color: black;
+}
+    
+#map {
+    padding-top: 5px;
+    display: block;
+    text-align: center;
+    grid-row: 2;
+    grid-column: 1/4;
+    border-radius: 5px;
+}
+
+.btn {
+    margin-top: 50px;
+    height: 35px;
+    width: 80%;
+    text-align: center;
+    text-decoration: none;
+    padding: 30px;
+    font-family: verdana;
+    font-size: 1.1em;
+    color: #FFFFFF;
+    background-color: #e36c09;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border: 8px solid #FFFFFF;
+    box-shadow: 4px 3px 12px #444444;
+    -webkit-box-shadow: 4px 3px 12px #444444;
+    -moz-box-shadow: 4px 3px 12px #444444;
+}
+    
+    
+.btn:hover {
+    padding: 30px;
+    background-color: #76923c;
+    box-shadow: 4px 3px 12px #777777;
+    -webkit-box-shadow: 4px 3px 12px #777777;
+    -moz-box-shadow: 4px 3px 12px #777777;
+}
+
+#position_depart {
+    grid-row: 3;
+    grid-column: 1;
+    display: block;
+    text-align: center;
+} 
+    
+#selec_pokemon {
+    grid-row: 3;
+    grid-column: 2;
+    display: block;
+    text-align: center;
+} 
+
+#calcul_itineraire {
+    grid-row: 3;
+    grid-column: 3;
+    display: block;
+    text-align: center;
+}
+
+#footer {
+    color: black;
+    text-align: center;
+    grid-row: 4;
+    grid-column: 1/4;
+    border-radius: 5px;
+}

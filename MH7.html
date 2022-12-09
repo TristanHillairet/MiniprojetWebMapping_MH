@@ -13,8 +13,9 @@
 </head>
 <body>
     <div id="test_carte">
-        <h1>Calcul d'itinéraire pour récupérer des Pokémons</h1>
-
+        <div id="titre">
+            <h1>Calcul d'itinéraire pour récupérer des Pokémons</h1>
+        </div>
 
         <!-- Map -->
         <div id="map"></div>
@@ -24,6 +25,11 @@
          crossorigin="">
         </script>
 
+        <button class="btn" id="position_depart" type="button" onclick="get_depart();">Sélection du départ</button>
+
+        <button class="btn" id="selec_pokemon" type="button" onclick="get_pokemons();">Sélection des pokemons</button>
+
+        <button class="btn" id="calcul_itineraire" type="button" onclick="do_calculation();">Calcul de l'itinéraire</button>
 
         <footer id="footer">Benoit Cachard</footer>
 
