@@ -17,5 +17,6 @@
             ];
         }
         echo json_encode($tableau);
+    }
 
 ?>
