@@ -22,7 +22,7 @@ fetch('calcul_itineraire.php', {
 .then(results => {
 	results.forEach(function (result) {
 		
-		let coord = result.coordinates;
+		let coord = JSON.parse(result.coordinates);
 		let name = result.pokemon;
 
 		let div = document.createElement('div');
