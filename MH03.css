@@ -1,0 +1,13 @@
+body{
+    margin: 0;
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1000px 1fr;
+    grid-template-rows: 100px 1000px 1fr;
+}
+
+#map {
+    grid-column: 1;
+    grid-row: 2;
+}
