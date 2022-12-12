@@ -4,7 +4,7 @@
 
     if (isset($json["initialisation"] ) == true) { //Renvoi l'intégralité de la table pour faire tourner la fonction principale en analysant chacune des lignes
 
-        $sql = "SELECT * FROM pokemon_data;";
+        $sql = "SELECT * FROM pokemon_data LIMIT 100;";
         $resultset = $connexion->prepare($sql);
         $resultset->execute();
 
