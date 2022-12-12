@@ -1,7 +1,7 @@
 console.log("bonjour");
 
-let ensg = [48.8410837, 2.5875354];/*Point de départ*/
-let map = L.map('map').setView(ensg, 10);/*Initialisation de la carte au point de départ*/
+let ensg = [10, 20];/*Point de départ*/
+let map = L.map('map').setView(ensg, 4);/*Initialisation de la carte au point de départ*/
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -19,7 +19,7 @@ fetch('MH03.php', {
 .then(r => {
     for (i = 0; i < 152; i++) {
         let item = r[i];
-        let nom = item['pokemon'];
+        let nom = item['pokemon'].split(' ')[0];
         let str_coord = item['coordinates'];
         str_coord = str_coord.slice(1, -1);
         let lon = str_coord.split(',')[0];
@@ -29,13 +29,24 @@ fetch('MH03.php', {
 })
 
 let layerALL = L.layerGroup();
+let layerSELECT = L.layerGroup();
 map.addLayer(layerALL);
 
 function AllMarker(latitude, longitude, nompokemon){
-    var marker = new L.Marker([latitude, longitude]);
+    var marker = new L.Marker([latitude, longitude],{
+        opacity: 0.5,
+    });
     marker.bindPopup(nompokemon);
     layerALL.addLayer(marker);
-    marker.on('click',click(nompokemon));
+    marker.on('click', function(e) {
+        layerSELECT.addLayer(this);
+        this.setOpacity(1);
+        console.log(nompokemon);
+        fetchSelect(nompokemon);
+        map.removeLayer(layerALL);
+        map.addLayer(layerSELECT);
+        map.setView([latitude, longitude], 9);
+    });
     marker.on('mouseover', function (e) {
         this.openPopup();
     });
@@ -44,10 +55,9 @@ function AllMarker(latitude, longitude, nompokemon){
     });
 }
 
-let layerSELECT = L.layerGroup();
+function fetchSelect(nompokemon){
 
-function click(nompokemon){
-    var select = 'select=' + nompokemon;
+    var select = "select="+nompokemon;
     fetch('MH03.php', {
         method: 'post',
         body: select,
@@ -57,28 +67,25 @@ function click(nompokemon){
     })
     .then(r => r.json())
     .then(r => {
+        console.log(r);
         for (i = 0; i < r.length; i++) {
             let item = r[i];
-            let nom = item['pokemon'];
+            let nom = item['pokemon'].split(' ')[0];
             let str_coord = item['coordinates'];
             str_coord = str_coord.slice(1, -1);
             let lon = str_coord.split(',')[0];
             let lat = str_coord.split(',')[1];
-            SelectMarker(lat, lon, nom);
+            var marker = new L.Marker([lat, lon],{
+                nom: nompokemon
+            });
+            marker.bindPopup(nom);
+            layerSELECT.addLayer(marker);
+            marker.on('mouseover', function (e) {
+                this.openPopup();
+            });
+              marker.on('mouseout', function (e) {
+                this.closePopup();
+            });
         }
-    })
-    map.removeLayer(layerALL);
-    map.addLayer(layerSELECT);
-}
-
-function SelectMarker(latitude, longitude, nompokemon){
-    var marker = new L.Marker([latitude, longitude]);
-    marker.bindPopup(nompokemon);
-    layerSELECT.addLayer(marker);
-    marker.on('mouseover', function (e) {
-        this.openPopup();
-    });
-      marker.on('mouseout', function (e) {
-        this.closePopup();
-    });
+    })    
 }

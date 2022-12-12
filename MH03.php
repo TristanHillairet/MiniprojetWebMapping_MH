@@ -24,7 +24,9 @@ if (isset($_POST['pokemon'])){
 
 else if (isset($_POST['select'])){
 
-    $query = "SELECT pokemon, coordinates FROM pokemon_data";
+    $nom = $_POST['select'];
+
+    $query = "SELECT pokemon, coordinates FROM pokemon_data WHERE pokemon='$nom'";
     $POKEMON = mysqli_query($link,$query);
     $pokemon = [];
 
