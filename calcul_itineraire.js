@@ -16,9 +16,43 @@ var Stamen_Watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/w
 }).addTo(map);
 
 
+// appel des boutons et désactivation des boutons des étapes avancées
+
+let bouton_etape1 = document.getElementById("position_depart");
+let bouton_etape2 = document.getElementById("selec_pokemon");
+let bouton_etape3 = document.getElementById("calcul_itineraire");
+//bouton_etape2.disabled = true;
+//bouton_etape3.disabled = true;
+
+
+// personnalisation des marqueurs
+
+let LeafIcon = L.Icon.extend({
+	options: {
+	   iconSize:     [24, 36],
+	   shadowSize:   [0, 0],
+	   iconAnchor:   [12, 36],
+	   shadowAnchor: [4, 62],
+	   popupAnchor:  [0, -20]
+	}
+});
+
+let start = new LeafIcon({iconUrl: "icon/start.png"});
+let pokeball = new LeafIcon({iconUrl: "icon/pokeball.png"});
+
+
 // fonction permettant de remplir la liste des points d'intérêts
 
-function addtolist(lat, lng) {
+let pt_depart_arrivee = [];
+let points_passage = [];
+
+function addtodepartarrivee(lat, lng) {
+	//console.log(lat, lng); // permet de tester les paramètres qui vont rentrer dans la liste 
+	pt_depart_arrivee.push([lat, lng]);
+	console.log(pt_depart_arrivee);
+}
+
+function addtopassage(lat, lng) {
 	//console.log(lat, lng); // permet de tester les paramètres qui vont rentrer dans la liste 
 	points_passage.push([lat, lng]);
 	console.log(points_passage);
@@ -27,23 +61,25 @@ function addtolist(lat, lng) {
 
 // fonctions d'écoute des boutons
 
-let points_passage = [];
-
 function get_depart() {
-	map.on('click', function(e){
+	alert('Selectionnez un point de départ en cliquant sur la carte');
+	map.addEventListener('click', function(e){
+		pt_depart_arrivee.splice(0, pt_depart_arrivee.length);
 		newMarker(e);
 	});
 
 	function newMarker(e){
 		depart.clearLayers();
-		L.marker(e.latlng).addTo(depart);
-		addtolist(e.latlng.lat, e.latlng.lng);
+		L.marker([e.latlng.lat, e.latlng.lng], {icon: start}).addTo(depart);
+		addtodepartarrivee(e.latlng.lat, e.latlng.lng);
 	}
 }
 
 
 function get_pokemons() {
+	alert("Selectionnez dans l'ordre tous les pokemons par lesquels vous souhaitez passer pour les récupérer");
 	pokemon.clearLayers();
+
 	fetch('calcul_itineraire.php', {
 		method: 'post',
 		body: JSON.stringify({["initialisation"] : true}) //Renvoi l'intégralité de la table pour faire tourner la fonction principale en analysant chacune des lignes
@@ -52,12 +88,10 @@ function get_pokemons() {
 	.then(results => {
 		results.forEach(function (result) {
 			
-			let coord = JSON.parse(result.coordinates);
+			let coord = JSON.parse(result.coordinates); // les coordonnées sont emprisonnées dans une string, donc on les récupèrent avec un JSON.parse
 			let lat = coord[0];
 			let lng = coord[1];
-			let name = result.pokemon;
-
-			//console.log(lat, lng);
+			let name = result.pokemon; // on récupère le nom, la latitude et la longitude de chaque pokemon 
 	
 			let div = document.createElement('div');
 			div.className = "button_recup";
@@ -68,14 +102,20 @@ function get_pokemons() {
 			div.append(text);
 			div.append(button);
 
-			pokemon_affiche = L.marker([lat, lng]).addTo(pokemon).bindPopup(div);
+			pokemon_affiche = L.marker([lat, lng], {icon: pokeball}).addTo(pokemon).bindPopup(div); // chaque pokemon est ajouté en tant que marqueur
 
-			button.addEventListener('click', addtolist.bind(null, lat, lng)); // le bind renvoie le contexte, donc le null premet de dire que je ne veut pas le transmettre à la fonction
+			button.addEventListener('click', addtopassage.bind(null, lat, lng)); // le bind renvoie le contexte, donc le null premet de dire que je ne veut pas le transmettre à la fonction
 		})
 	})
 }
 
 
 function do_calculation() {
+	let waypoints = pt_depart_arrivee.concat(points_passage).concat(pt_depart_arrivee); // on obtient un seul et unique tableau avec pt de départ, points de passage, pt d'arrivée
+	pokemon.clearLayers();
+	depart.clearLayers(); // on enlève de la carte les marqueurs présents lors des étapes de sélection
 	
+	var routeControl = L.Routing.control({}).addTo(map);
+	routeControl.setWaypoints(waypoints); // tous les points de du tableau "points_passage" sont ajoutés en tant qu'étapes de l'itinéraire grâce à leur latitude et longitude
+	let error = L.Routing.errorControl(routeControl).addTo(map);
 }
