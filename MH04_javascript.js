@@ -11,3 +11,43 @@ var Stamen_Watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/w
 	maxZoom: 16,
 	ext: 'jpg'
 }).addTo(map);
+
+
+//Déclaration des variables
+let tableau = document.getElementById('tableau');
+
+
+//Récupération des données du lieu (la totalité)
+fetch('MH04_server.php', {
+    method: 'post'
+    })
+.then(results => results.json())
+.then(results => {
+    results.forEach(function (result) {
+		let coordinates = result.coordinates; //De type str
+		coordinates = coordinates.slice(1, -1);
+    	let lon = coordinates.split(',')[0];
+    	let lat = coordinates.split(',')[1];
+
+		let marker = L.marker([lat, lon]);
+    	marker.addTo(groupmarker);
+	
+		let querie = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat="+ lat +"&lon="+ lon;
+
+    	fetch(querie)
+    	.then(result_2 => result_2.json())
+    	.then(result_2 => {
+			result_2.forEach(function (result_2) {
+				let adresse = result_2.data.address.road;
+    
+				let new_line = tableau.appendChild(document.createElement('tr'));
+				let colonne_1 = new_line.appendChild(document.createElement('td'));
+				let colonne_2 = new_line.appendChild(document.createElement('td'));
+				let colonne_3 = new_line.appendChild(document.createElement('td'));
+				colonne_1.appendChild(document.createTextNode(lon));
+				colonne_2.appendChild(document.createTextNode(lat));
+				colonne_3.appendChild(document.createTextNode(adresse));
+			})
+		})
+    })
+})
