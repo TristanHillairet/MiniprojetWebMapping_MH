@@ -26,18 +26,19 @@ fetch('MH04_server.php', {
     results.forEach(function (result) {
 		let coordinates = result.coordinates; //De type str
 		coordinates = coordinates.slice(1, -1);
-    	let lon = coordinates.split(',')[0];
-    	let lat = coordinates.split(',')[1];
+    	let lon = coordinates.split(',')[1];
+    	let lat = coordinates.split(',')[0];
 
 		let marker = L.marker([lat, lon]);
     	marker.addTo(groupmarker);
 	
 		let querie = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat="+ lat +"&lon="+ lon;
+		console.log(querie);
 
     	fetch(querie)
-    	.then(result_2 => result_2.json())
-    	.then(result_2 => {
-			result_2.forEach(function (result_2) {
+    	.then(results_2 => results_2.json())
+    	.then(results_2 => {
+			results_2.forEach(function (result_2) {
 				let adresse = result_2.data.address.road;
     
 				let new_line = tableau.appendChild(document.createElement('tr'));
