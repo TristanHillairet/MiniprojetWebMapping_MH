@@ -1,0 +1,6 @@
+# Jour 1 :
+
+- Installation des bdd sur pgAdmin (de csv à BDD pgAdmin)
+- Découverte du projet
+- Mise en place du formulaire avec les différents choix, et création de la carte
+- 

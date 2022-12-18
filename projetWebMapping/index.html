@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
+	integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
+	crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
+	integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
+	crossorigin=""></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="formulaire">
+        <h1>Formulaire pour entrer le pokemon</h1>
+    <form action="#" id="formChoixPkm">
+    <fieldset>
+        <p>
+            <label>Choix du pokemon (obligatoire): 
+                <select name="pokemon" id="select-pokemon"></select>
+                <span id ="spanPokemon" class="error" aria-live="polite"></span>
+            </label>
+        </p>       
+        <p>
+            <label>Nom d'utilisateur (obligatoire): 
+                <input class = 'text' id ="ChoixNom" type="text" name="username">
+                <span id ="spanName" class="error" aria-live="polite"></span>
+            </label>
+        </p>
+        <p>
+            <label>Méthode de localisation (obligatoire):
+                <span id ="spanLoc" class="error" aria-live="polite"></span>
+                <p>
+                    <input class="choix" type ='radio' name='localisation' value='Geolocalisation' id='Geolocalisation'>Geolocalisation
+                    <span id ="spanGeoloc" class="error" aria-live="polite"></span>
+                </p>
+                <p>
+                    <input class="choix" type ='radio' name='localisation' value='Carte' id='Carte'>Choix de l'emplacement sur la carte
+                    <span id ="spanCarte" class="error" aria-live="polite"></span>
+                </p>
+            </label>
+        </p>
+        <p id='pHeure'>
+            <label>
+                <input class="choix" type ='checkbox' name='heure' value='oui' id='heure'>Je souhaite indiquer l'heure à laquelle j'ai vu le pokemon. Sans cocher,  l'heure envoyée sera celle de l'heure actuelle) (facultatif)
+            </label>
+        </p>
+        <button class ="button"><span>Envoyer les données</span></button>
+    </fieldset>
+    </form>
+    <div id="divPopup"><button class ="button" onclick="removePop()"><span>Enlever les popup sur la carte</span></button></div>
+    <div id="divMarker"><button class ="button" onclick="removeMark()"><span>Enlever les markers sur la carte</span></button></div>
+    </div>
+    <div id="map"></div>
+    <script src="javascript.js"></script>
+</body>
+</html>
