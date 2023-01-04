@@ -102,6 +102,7 @@ function get_pokemons() {
 			div.append(text);
 			div.append(button);
 
+
 			pokemon_affiche = L.marker([lat, lng], {icon: pokeball}).addTo(pokemon).bindPopup(div); // chaque pokemon est ajouté en tant que marqueur
 
 			button.addEventListener('click', addtopassage.bind(null, lat, lng)); // le bind renvoie le contexte, donc le null premet de dire que je ne veut pas le transmettre à la fonction
@@ -109,13 +110,98 @@ function get_pokemons() {
 	})
 }
 
+function return_lowest(tab) {
+	let lowest = tab[0];
+	for (i=1; i < tab.length; i++) {
+		if(tab[i]<lowest) {
+			lowest = tab[i]
+		}
+	}
+	console.log("liste_distance minimum value = " + lowest);
+	return tab.indexOf(lowest)
+}
 
 function do_calculation() {
-	let waypoints = pt_depart_arrivee.concat(points_passage).concat(pt_depart_arrivee); // on obtient un seul et unique tableau avec pt de départ, points de passage, pt d'arrivée
+
+	// trouver le point de passage le plus proche du départ
+
+	pt_passage_ordre = [];
+	list_distance = [];
+
+
+	for (var i = 0; i < points_passage.length; i++) {
+		console.log('passage dans le for');
+		let waypoints = [];
+			waypoints.push(pt_depart_arrivee[0]);
+			waypoints.push(points_passage[i]);
+			//waypoints.push([pt_depart_arrivee[0][0], pt_depart_arrivee[0][1]]);
+			//waypoints.push([points_passage[i][0], points_passage[i][1]]);
+		console.log(waypoints);
+		var routeControl = L.Routing.control({});
+		routeControl.setWaypoints(waypoints);
+		console.log('test 1a');
+		routeControl.on('routesfound', function(e) {
+			console.log('test 1b');
+			var distance = e.routes[0].summary.totalDistance;
+			list_distance.push(distance);
+			console.log(list_distance);
+		})
+	}
+
+	//let min = Math.min(...list_distance);
+	//console.log('liste');
+	//console.log(list_distance);
+	//console.log(min);
+	//let indice = list_distance.indexOf(min);
+	let indice = return_lowest(list_distance);
+	console.log(indice);
+	pt_passage_ordre.push(points_passage[indice]);
+	//pt_passage_ordre.push([points_passage[indice][0], points_passage[indice][1]]);
+	console.log(pt_passage_ordre);
+	points_passage.splice(indice, 1);
+	list_distance.splice(0, list_distance.lenght);
+
+
+	// On fait maintenant de même avec tous les points un par un 
+
+	/* while (points_passage.lenght != 0) {
+		console.log('passage dans le while');
+		let pt_debut = [];
+		pt_debut.push([pt_passage_ordre[points_passage.length-1][0], pt_passage_ordre[points_passage.length-1][1]]);
+		console.log('pt_debut :' + pt_debut);
+		for (var i = 0; i < points_passage.length; i++) {
+			let waypoints = [];
+			waypoints.concat(pt_debut);
+			waypoints.push([points_passage[i][0], points_passage[i][1]]);
+			console.log('waypoints :' + waypoints);
+			var routeControl = L.Routing.control({});
+			routeControl.setWaypoints(waypoints);
+			console.log('test 2a');
+			routeControl.on('routesfound', function(e) {
+				console.log('test 2b');
+				var distance = e.routes[0].summary.totalDistance;
+				list_distance.push(distance);
+				console.log(distance);
+			})
+		}
+		//console.log(list_distance);
+		min = Math.min(list_distance);
+		indice = list_distance.indexOf(min);
+		pt_passage_ordre.push(points_passage[indice]);
+		points_passage.splice(indice, 1);
+		list_distance.splice(0, list_distance.lenght);
+		//console.log(points_passage);
+		break;
+	} */
+
+
+	// affichage de l'itinéraire avec les points de passage dans l'ordre le plus optimisé
+
+	let waypoints_final = pt_depart_arrivee.concat(pt_passage_ordre).concat(pt_depart_arrivee); // on obtient un seul et unique tableau avec pt de départ, points de passage, pt d'arrivée
 	pokemon.clearLayers();
 	depart.clearLayers(); // on enlève de la carte les marqueurs présents lors des étapes de sélection
-	
+	console.log("début du traitement de l'affichage");
 	var routeControl = L.Routing.control({}).addTo(map);
-	routeControl.setWaypoints(waypoints); // tous les points de du tableau "points_passage" sont ajoutés en tant qu'étapes de l'itinéraire grâce à leur latitude et longitude
+	routeControl.setWaypoints(waypoints_final); // tous les points de du tableau "points_passage" sont ajoutés en tant qu'étapes de l'itinéraire grâce à leur latitude et longitude
 	let error = L.Routing.errorControl(routeControl).addTo(map);
 }
