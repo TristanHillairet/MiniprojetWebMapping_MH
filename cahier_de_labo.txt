@@ -3,4 +3,15 @@
 - Installation des bdd sur pgAdmin (de csv à BDD pgAdmin)
 - Découverte du projet
 - Mise en place du formulaire avec les différents choix, et création de la carte
-- 
+
+# Jour 2 :
+
+- Mise en place des différentes fonctions de choix de localisation du pokemon (par géolocalisation ou par choix sur la carte)
+- Mise en place du choix de l'horaire à laquelle on a vu le pokemon
+- Mise en place de la validation du formulaire (vérifier que l'utilisateur.ice a bien mis tous les données nécessaires)
+
+# Jour 3 :
+
+- Récupération des différentes icones correspondant à chaque pokemon pour avoir un choix plus visuel sur la carte et implémentation du visuel du pokemon
+avec une fonction correspondante
+- Finition de la fonction de validation du formulaire pour l'envoyer dans la BDD si tout est bon
