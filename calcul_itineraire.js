@@ -125,7 +125,7 @@ function do_calculation() {
 
 	// trouver le point de passage le plus proche du départ
 
-	pt_passage_ordre = [];
+	/* pt_passage_ordre = [];
 	list_distance = [];
 
 
@@ -159,7 +159,7 @@ function do_calculation() {
 	//pt_passage_ordre.push([points_passage[indice][0], points_passage[indice][1]]);
 	console.log(pt_passage_ordre);
 	points_passage.splice(indice, 1);
-	list_distance.splice(0, list_distance.lenght);
+	list_distance.splice(0, list_distance.lenght); */
 
 
 	// On fait maintenant de même avec tous les points un par un 
@@ -194,14 +194,184 @@ function do_calculation() {
 		break;
 	} */
 
+	// Première solution de CHATGPT 
+
+	/*// Fonction pour trouver la distance entre deux points à l'aide de la bibliothèque Leaflet
+	function findDistance(point1, point2) {
+		let waypoints = [];
+		waypoints.push(point1);
+		waypoints.push(point2);
+		console.log(waypoints);
+		// Code pour trouver la distance entre point1 et point2 à l'aide de Leaflet
+		var routeControl = L.Routing.control({});
+		routeControl.setWaypoints(waypoints);
+		routeControl.on('routesfound', function(e) {
+			var distance = e.routes[0].summary.totalDistance;
+			return distance;
+		})
+  	}
+  
+  	// Fonction pour trouver l'itinéraire le plus court
+  	function findShortestRoute(points) {
+	// Liste des permutations possibles des points de départ
+		let permutations = [];
+		// Fonction pour trouver toutes les permutations
+		function findPermutations(array, current) {
+	  		if (array.length === 0) {
+				permutations.push(current);
+	  		} else {
+				for (let i = 0; i < array.length; i++) {
+		  			let newArray = array.slice();
+		  			let newCurrent = current.slice();
+		  			newCurrent.push(array[i]);
+		  			newArray.splice(i, 1);
+		  			findPermutations(newArray, newCurrent);
+				}
+	  		}
+		}
+		findPermutations(points, []);
+	
+		// Trouver le chemin le plus court parmi toutes les permutations
+		let shortestRoute = permutations[0];
+		let shortestDistance = 0;
+		for (let i = 0; i < permutations.length; i++) {
+	  		let currentRoute = permutations[i];
+	  		let currentDistance = 0;
+	  		for (let j = 0; j < currentRoute.length - 1; j++) {
+				currentDistance += findDistance(currentRoute[j], currentRoute[j + 1]);
+	  		}
+	  		if (i === 0 || currentDistance < shortestDistance) {
+				shortestRoute = currentRoute;
+				shortestDistance = currentDistance;
+	  		}
+		}
+		return shortestRoute;
+  	}
+  
+  	// Exemple d'utilisation
+  	let points = pt_depart_arrivee.concat(points_passage);
+  	let shortestRoute = findShortestRoute(points);
+  	console.log(shortestRoute); */
+
+
+	// Troisième solution de ChatGPT 
+
+	/*function tspBruteForce(coords) {
+		let n = coords.length;
+		let minPath = [];
+		let minLength = Infinity;
+	
+		// Calculer la distance entre deux points
+		function dist(a, b) {
+			return Math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2);
+		}
+	
+		// Générer tous les chemins possible à l'aide d'une récursion
+		function generatePaths(path, visited) {
+			if (path.length === n) {
+				let length = 0;
+				for (let i = 0; i < n - 1; i++) {
+					length += dist(coords[path[i]], coords[path[i + 1]]);
+				}
+				length += dist(coords[path[0]], coords[path[n - 1]]);
+				if (length < minLength) {
+					minPath = path.slice();
+					minLength = length;
+				}
+				return;
+			}
+			for (let i = 0; i < n; i++) {
+				if (!visited[i]) {
+					visited[i] = true;
+					path.push(i);
+					generatePaths(path, visited);
+					visited[i] = false;
+					path.pop();
+				}
+			}
+		}
+	
+		generatePaths([], Array(n).fill(false));
+		return minPath.map(i => coords[i]);
+	}
+	
+	// on utilise les fonctions ci-dessus pour renvoyer l'itinéraire le plus optimisé
+	let optimizedPath = tspBruteForce(points_passage);
+	console.log(optimizedPath);
+	let waypoints_complete = pt_depart_arrivee.concat(optimizedPath).concat(pt_depart_arrivee);
+	console.log(waypoints_complete);
+
+	// on cherche maintenant à afficher l'itinéraire Routing machine associé à l'ordre des points de passage calculé précédemment par bruteforce
+	pokemon.clearLayers();
+	depart.clearLayers(); // on enleve les affichages précédents pour garder une carte lisible
+	var routeControl = L.Routing.control({}).addTo(map);
+	routeControl.setWaypoints(waypoints_complete);
+	let error = L.Routing.errorControl(routeControl).addTo(map); */
+
+
+	// Troisième solution de ChatGPT
+
+	// on définit les points de passages pas encore dans le bon ordre
+	var coords = pt_depart_arrivee.concat(points_passage);
+
+	// Initialisation du tableau pour stocker l'itinéraire optimisé
+	var optimized = [];
+
+	// Fonction pour trouver la distance entre deux points
+	function getDistance(start, end) {
+    	var distance;
+		var waypoints = [];
+		waypoints.push(start);
+		waypoints.push(end);
+		var routeControl = L.Routing.control({}).addTo(map);
+		routeControl.setWaypoints(waypoints);
+		routeControl.on('routesfound', function(e) {
+        	var routes = e.routes;
+        	distance = routes[0].summary.totalDistance;
+    	});
+    	return distance;
+	}
+
+	// Boucle pour optimiser l'ordre des points
+	var currentPoint = coords[0];
+	optimized.push(currentPoint);
+	coords.splice(0, 1);
+	while (coords.length > 0) {
+    	var minDistance = Number.MAX_VALUE;
+    	var minIndex;
+    	for (var i = 0; i < coords.length; i++) {
+        	var distance = getDistance(currentPoint, coords[i]);
+        	if (distance < minDistance) {
+            	minDistance = distance;
+            	minIndex = i;
+        	}
+    	}
+    	currentPoint = coords[minIndex];
+    	optimized.push(currentPoint);
+    	coords.splice(minIndex, 1);
+	}
+
+	// Afficher le résultat
+	console.log(optimized);
+	let final_optimized = optimized.concat(pt_depart_arrivee); 
+
+	// on cherche maintenant à afficher l'itinéraire Routing machine associé à l'ordre des points de passage calculé précédemment
+	pokemon.clearLayers();
+	depart.clearLayers(); // on enleve les affichages précédents pour garder une carte lisible
+	var routeControl = L.Routing.control({geocoder: L.Control.Geocoder.nominatim()}).addTo(map);
+	routeControl.setWaypoints(final_optimized);
+	let error = L.Routing.errorControl(routeControl).addTo(map);
+
+  
+
 
 	// affichage de l'itinéraire avec les points de passage dans l'ordre le plus optimisé
 
-	let waypoints_final = pt_depart_arrivee.concat(pt_passage_ordre).concat(pt_depart_arrivee); // on obtient un seul et unique tableau avec pt de départ, points de passage, pt d'arrivée
+	/* let waypoints_final = pt_depart_arrivee.concat(pt_passage_ordre).concat(pt_depart_arrivee); // on obtient un seul et unique tableau avec pt de départ, points de passage, pt d'arrivée
 	pokemon.clearLayers();
 	depart.clearLayers(); // on enlève de la carte les marqueurs présents lors des étapes de sélection
 	console.log("début du traitement de l'affichage");
 	var routeControl = L.Routing.control({}).addTo(map);
 	routeControl.setWaypoints(waypoints_final); // tous les points de du tableau "points_passage" sont ajoutés en tant qu'étapes de l'itinéraire grâce à leur latitude et longitude
-	let error = L.Routing.errorControl(routeControl).addTo(map);
+	let error = L.Routing.errorControl(routeControl).addTo(map); */
 }
