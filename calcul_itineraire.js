@@ -71,28 +71,28 @@ function get_depart() { // déclanchée au clic de l'utilisateur sur le bouton '
 	alert("Selectionner un point de départ en cliquant sur la carte puis appuyer sur 'Selection des pokémons'");
 	map.addEventListener('click', function(e){ // on écoute le clic sur la carte
 		pt_depart_arrivee.splice(0, pt_depart_arrivee.length);
-		newMarker(e);
+		newMarker(e); // on instancie une fonction qui va créer un nouveau marker 
 	});
 
 	function newMarker(e){
-		depart.clearLayers();
-		L.marker([e.latlng.lat, e.latlng.lng], {icon: start}).addTo(depart);
-		addtodepartarrivee(e.latlng.lat, e.latlng.lng);
+		depart.clearLayers(); // on enlève les marqueurs précédemment placés si il y en a
+		L.marker([e.latlng.lat, e.latlng.lng], {icon: start}).addTo(depart); // on récupère les coordonnées du départ et on ajoute le marqueur avec le bon logo
+		addtodepartarrivee(e.latlng.lat, e.latlng.lng); // on l'ajoute à la liste prévu a cet effet grâce à la fonction appropriée
 	}
 }
 
 
 function get_pokemons() { // déclanchée au clic de l'utilisateur sur le bouton 'selection des pokemons'
 	alert("Selectionner les pokemons à récupérer puis appuyer sur 'calcul de l'itinéraire'");
-	pokemon.clearLayers();
+	pokemon.clearLayers(); // on efface les marqueurs précédemment placés
 
-	fetch('calcul_itineraire.php', {
+	fetch('calcul_itineraire.php', { // on va faire une requête SQL à la base de données de test contenant des pokemons, voir le fichier php pour cela
 		method: 'post',
-		body: JSON.stringify({["initialisation"] : true}) //Renvoi l'intégralité de la table pour faire tourner la fonction principale en analysant chacune des lignes
+		body: JSON.stringify({["initialisation"] : true}) //Renvoi les 100 premières lignes de la table pour faire tourner la fonction principale en analysant chacune des lignes
 	})
-	.then(results => results.json())
+	.then(results => results.json()) // les résultats de la requête SQL sont stockés dans un JSON
 	.then(results => {
-		results.forEach(function (result) {
+		results.forEach(function (result) { // on parcourt chaque résultat du JSON
 			
 			let coord = JSON.parse(result.coordinates); // les coordonnées sont emprisonnées dans une string, donc on les récupèrent avec un JSON.parse
 			let lat = coord[0];
@@ -106,30 +106,22 @@ function get_pokemons() { // déclanchée au clic de l'utilisateur sur le bouton
 			let text = document.createElement('p');
 			text.innerText = name;
 			div.append(text);
-			div.append(button);
+			div.append(button); // on crée une div contenant du texte (nom du pokemon en question) et un bouton (récupérer) qui s'affiche dans un popup dès que l'utilisateur va cliquer sur un pokemon
 
 
-			pokemon_affiche = L.marker([lat, lng], {icon: pokeball}).addTo(pokemon).bindPopup(div); // chaque pokemon est ajouté en tant que marqueur
+			pokemon_affiche = L.marker([lat, lng], {icon: pokeball}).addTo(pokemon).bindPopup(div); // chaque pokemon est ajouté en tant que marqueur avec son popup associé
 
-			button.addEventListener('click', addtopassage.bind(null, lat, lng)); // le bind renvoie le contexte, donc le null premet de dire que je ne veut pas le transmettre à la fonction
+			button.addEventListener('click', addtopassage.bind(null, lat, lng)); // on écoute le clic de l'utilisateur sur le bouton 'selectionner' d'un pokemon
+			// le bind renvoie le contexte, donc le null premet de dire que je ne veut pas le transmettre à la fonction
 		})
 	})
 }
 
-function return_lowest(tab) {
-	let lowest = tab[0];
-	for (i=1; i < tab.length; i++) {
-		if(tab[i]<lowest) {
-			lowest = tab[i]
-		}
-	}
-	console.log("liste_distance minimum value = " + lowest);
-	return tab.indexOf(lowest)
-}
 
 function do_calculation() { // déclanchée au clic de l'utilisateur sur le bouton 'calcul de l'itinéraire'
 
-	// solution selectionné pour l'optimisation : algo du plus proche voisin affichage vol d'oiseau + Routing machine
+	// solution selectionnée pour l'optimisation de l'itinéraire passant par tous les pokemons : algo du plus proche voisin 
+	// l'affichage se fait à la fois à vol d'oiseau +  par le réseau routier grâce à la Routing machine de Leaflet
 
 	function tspNearestNeighbour(points, start) {
 		// Créer un tableau pour stocker l'ordre des points
@@ -185,14 +177,16 @@ function do_calculation() { // déclanchée au clic de l'utilisateur sur le bout
 
 	// on utilise tspNearestNeighbour en on instancie les paramètres pour cela
 	let liste_points = pt_depart_arrivee.concat(points_passage);
-	let order = tspNearestNeighbour(liste_points, pt_depart_arrivee[0]);
+	let order = tspNearestNeighbour(liste_points, pt_depart_arrivee[0]); // on utilise en param les points de passages dans le désordre en commançant par le point de départ
+	// (voir ligne précédente) et on fournit également le point de départ brut 'pt_depart_arrivee[0]' à la fonction afin que ce dernier soit correctement 
+	// identifié et donc conservé en début d'itinéraire et ajouter en fin de celui-ci.
 
 	// on affiche les points dans le bon ordre dans la console pour faire une vérification si besoin
 	console.log(order);
 
 	// on enleve les affichages précédents pour garder une carte lisible
 	pokemon.clearLayers();
-	//depart.clearLayers(); 
+	depart.clearLayers(); 
 	
 	// Définir un tableau de marqueurs pour les points et les afficher sur la carte
 	let markers = [];
@@ -205,7 +199,7 @@ function do_calculation() { // déclanchée au clic de l'utilisateur sur le bout
 	polyline.addTo(map);
 
 	// on informe l'utilisateur de ce qu'il se passe à l'écran
-	alert("S'affiche sur la carte en bleu l'itinéraire optimisé à vol d'oiseau et en rouge l'itinéraire suivant le réseau routier (si celui-ci existe) calculé à l'aide de la Leaflet Routing Machine");
+	alert("S'affiche sur la carte en bleu l'itinéraire optimisé à vol d'oiseau et en rouge l'itinéraire suivant le réseau routier (si celui-ci existe) calculé à l'aide de la Leaflet Routing Machine. Un temps de chargement peut être nécéssaire pour ce dernier.");
 
 	// on cherche à afficher le même itinéraire mais passant par le réseau routier en utilisant la Routing Machine de Leaflet
 	var routeControl = L.Routing.control({}).addTo(map);

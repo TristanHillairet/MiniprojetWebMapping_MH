@@ -3,22 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Leaflet">
+    <!-- lien avec le fichier de style css -->
     <link rel="stylesheet" href="styles.css">
+    <!-- importation de la police d'écriture -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=cairo:300" rel="stylesheet" />
+    <!-- importation des outils de la bibliothèques Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
         crossorigin=""/>
+    <!-- importation des outils de la bibliothèques Leaflet en javascript -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
         integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
         crossorigin=""></script>
     <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    <!-- importation des outils de style de la bibliothèques Leaflet en javascript, permet l'affichage des instructions d'itinéraire -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <!-- permet de définir le petit logo placer sur l'onglet du site une fois ouvert -->
+    <link rel="icon" type="image/png" href="icon/pokeball.png" />
     <title>Itinéraire Pokemon</title>
 </head>
 <body>
     <div id="test_carte">
         <div id="titre">
-            <h1>Calcul d'itinéraire pour récupérer des Pokémons</h1>
+            <h1>Calcul et optimisation d'itinéraire pour la récupération de Pokémons</h1>
         </div>
 
         <!-- Map -->
@@ -30,6 +38,8 @@
         </script>
         <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 
+        <!-- définition des 3 boutons principaux présent sur la page web -->
+
         <button class="btn" id="position_depart" type="button" onclick="get_depart();">Sélection du départ</button>
 
         <button class="btn" id="selec_pokemon" type="button" onclick="get_pokemons();">Sélection des pokemons</button>
@@ -37,6 +47,8 @@
         <button class="btn" id="calcul_itineraire" type="button" onclick="do_calculation();">Calcul de l'itinéraire</button>
 
         <footer id="footer">Benoit Cachard</footer>
+
+        <!-- lien avec le fichier de calcul d'itinéraire codé en Javascript -->
 
         <script src="calcul_itineraire.js"></script>
     </div>
