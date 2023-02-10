@@ -6,6 +6,7 @@ let depart = L.featureGroup().addTo(map);
 pokemon.bringToFront();
 depart.bringToFront();
 
+// on choisit le style de carte voulu - choix dans ce cas d'une carte type cartoon - carte aux trésors
 
 var Stamen_Watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
 	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -16,16 +17,14 @@ var Stamen_Watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/w
 }).addTo(map);
 
 
-// appel des boutons et désactivation des boutons des étapes avancées
+// appel des 3 boutons principaux
 
 let bouton_etape1 = document.getElementById("position_depart");
 let bouton_etape2 = document.getElementById("selec_pokemon");
 let bouton_etape3 = document.getElementById("calcul_itineraire");
-//bouton_etape2.disabled = true;
-//bouton_etape3.disabled = true;
 
 
-// personnalisation des marqueurs
+// personnalisation des marqueurs sous forme de drapeau start ou de pokeball selon les cas
 
 let LeafIcon = L.Icon.extend({
 	options: {
@@ -41,16 +40,22 @@ let start = new LeafIcon({iconUrl: "icon/start.png"});
 let pokeball = new LeafIcon({iconUrl: "icon/pokeball.png"});
 
 
-// fonction permettant de remplir la liste des points d'intérêts
+// fonctions permettant de remplir la liste des points d'intérêts choisit par l'utilisateur
+
+// on initailise deux listes - une pour le point de départ / arrivée et une pour les pokemons à récupérer
 
 let pt_depart_arrivee = [];
 let points_passage = [];
+
+// fonction permettant d'ajouter le pt de départ / arrivée à la liste pt_depart_arrivee
 
 function addtodepartarrivee(lat, lng) {
 	//console.log(lat, lng); // permet de tester les paramètres qui vont rentrer dans la liste 
 	pt_depart_arrivee.push([lat, lng]);
 	console.log(pt_depart_arrivee);
 }
+
+// fonction permettant d'ajouter les pokemons à récupérer à la liste points_passage
 
 function addtopassage(lat, lng) {
 	//console.log(lat, lng); // permet de tester les paramètres qui vont rentrer dans la liste 
@@ -59,11 +64,12 @@ function addtopassage(lat, lng) {
 }
 
 
-// fonctions d'écoute des boutons
+// fonctions qui sont déclanchées au clic de l'utilisateur sur les boutons principaux
 
-function get_depart() {
+function get_depart() { // déclanchée au clic de l'utilisateur sur le bouton 'selection du départ'
+	// on informe l'utilisateur de ce qu'il doit faire
 	alert("Selectionner un point de départ en cliquant sur la carte puis appuyer sur 'Selection des pokémons'");
-	map.addEventListener('click', function(e){
+	map.addEventListener('click', function(e){ // on écoute le clic sur la carte
 		pt_depart_arrivee.splice(0, pt_depart_arrivee.length);
 		newMarker(e);
 	});
@@ -76,7 +82,7 @@ function get_depart() {
 }
 
 
-function get_pokemons() {
+function get_pokemons() { // déclanchée au clic de l'utilisateur sur le bouton 'selection des pokemons'
 	alert("Selectionner les pokemons à récupérer puis appuyer sur 'calcul de l'itinéraire'");
 	pokemon.clearLayers();
 
@@ -121,7 +127,7 @@ function return_lowest(tab) {
 	return tab.indexOf(lowest)
 }
 
-function do_calculation() {
+function do_calculation() { // déclanchée au clic de l'utilisateur sur le bouton 'calcul de l'itinéraire'
 
 	// solution selectionné pour l'optimisation : algo du plus proche voisin affichage vol d'oiseau + Routing machine
 
