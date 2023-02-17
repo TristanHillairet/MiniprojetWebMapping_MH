@@ -38,6 +38,7 @@ let LeafIcon = L.Icon.extend({
 
 let start = new LeafIcon({iconUrl: "icon/start.png"});
 let pokeball = new LeafIcon({iconUrl: "icon/pokeball.png"});
+let pokeball_ouverte = new LeafIcon({iconUrl: "icon/pokeball_ouverte.png"})
 
 
 // fonctions permettant de remplir la liste des points d'intérêts choisit par l'utilisateur
@@ -61,6 +62,7 @@ function addtopassage(lat, lng) {
 	//console.log(lat, lng); // permet de tester les paramètres qui vont rentrer dans la liste 
 	points_passage.push([lat, lng]);
 	console.log(points_passage);
+	//pokemon_affiche.setIcon(pokeball_ouverte);
 }
 
 
