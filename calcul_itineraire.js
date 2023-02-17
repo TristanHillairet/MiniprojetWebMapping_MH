@@ -17,7 +17,7 @@ var Stamen_Watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/w
 }).addTo(map);
 
 
-// appel des 3 boutons principaux
+// appel des 3 boutons principaux 
 
 let bouton_etape1 = document.getElementById("position_depart");
 let bouton_etape2 = document.getElementById("selec_pokemon");
