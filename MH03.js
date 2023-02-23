@@ -41,7 +41,7 @@ function AllMarker(latitude, longitude, nompokemon){
     marker.on('click', function(e) {
         layerSELECT.addLayer(this);
         this.setOpacity(1);
-        console.log(nompokemon);
+        var nomselect = nompokemon;
         fetchSelect(nompokemon);
         map.removeLayer(layerALL);
         map.addLayer(layerSELECT);
@@ -67,7 +67,6 @@ function fetchSelect(nompokemon){
     })
     .then(r => r.json())
     .then(r => {
-        console.log(r);
         for (i = 0; i < r.length; i++) {
             let item = r[i];
             let nom = item['pokemon'].split(' ')[0];
@@ -76,7 +75,6 @@ function fetchSelect(nompokemon){
             let lon = str_coord.split(',')[0];
             let lat = str_coord.split(',')[1];
             var marker = new L.Marker([lat, lon],{
-                nom: nompokemon
             });
             marker.bindPopup(nom);
             layerSELECT.addLayer(marker);
@@ -89,3 +87,30 @@ function fetchSelect(nompokemon){
         }
     })    
 }
+
+/*let layerFORT = L.layerGroup();
+let layerFAIBLE = L.layerGroup();
+
+function fetchFaible(nompokemon){
+
+    var faible = 'faible='+nompokemon;
+    fetch('MH03.php', {
+        method: 'post',
+        body: faible,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }       
+    })
+}
+
+function fetchFort(nompokemon){
+
+    var fort = 'faible='+nompokemon;
+    fetch('MH03.php', {
+        method: 'post',
+        body: fort,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }       
+    })
+}*/
