@@ -41,7 +41,6 @@ function AllMarker(latitude, longitude, nompokemon){
     marker.on('click', function(e) {
         layerSELECT.addLayer(this);
         this.setOpacity(1);
-        var nomselect = nompokemon;
         fetchSelect(nompokemon);
         map.removeLayer(layerALL);
         map.addLayer(layerSELECT);
@@ -113,3 +112,10 @@ fetch('MH03.php', {
         pokemons.appendChild(option);
     };
 })
+
+function seePokemon(){
+    var nompokemon = document.getElementById('select').value;
+    fetchSelect(nompokemon);
+    map.removeLayer(layerALL);
+    map.addLayer(layerSELECT);
+}
