@@ -114,6 +114,7 @@ fetch('MH03.php', {
 })
 
 function seePokemon(){
+    layerSELECT.clearLayers();
     var nompokemon = document.getElementById('select').value;
     fetchSelect(nompokemon);
     map.removeLayer(layerALL);
