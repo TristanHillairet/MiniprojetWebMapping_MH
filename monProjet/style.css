@@ -31,13 +31,20 @@ form{
 }
 
 #pokemons img{
-    width : 70px;
-    height : 70px;
+    width : 85px;
+    height : 85px;
 }
 
 #text{
     text-align: center;
     text-decoration-line: underline;
     font-weight: bold;
+}
+
+#container{
+    text-align: center;
+    width: 200px;
+    height: 100px;
+    overflow: scroll;
 }
  
