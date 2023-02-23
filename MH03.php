@@ -43,5 +43,23 @@ else if (isset($_POST['select'])){
     
 }
 
+else if (isset($_POST['form'])){
+
+    $query = "SELECT name FROM pokedex";
+    $POKEMON = mysqli_query($link,$query);
+    $pokemon = [];
+
+    if (isset($POKEMON)){
+        while($rows1 = mysqli_fetch_assoc($POKEMON)){
+            $pokemon[]=$rows1;
+        }
+        echo json_encode($pokemon, JSON_NUMERIC_CHECK);
+    }
+
+    else if (!isset($pokemon)){
+        echo "la requête n'est pas bonne";
+    }
+}
+
 
 ?>

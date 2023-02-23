@@ -88,29 +88,28 @@ function fetchSelect(nompokemon){
     })    
 }
 
-/*let layerFORT = L.layerGroup();
-let layerFAIBLE = L.layerGroup();
+let values = [];
+let form = 'form=';
+fetch('MH03.php', {
+    method: 'post',
+    body: form,
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+})
+.then(r => r.json())
+.then(r => {
+    for (i = 0; i < r.length; i++) {
+        let item = r[i];
+        let nom = item['name'];
+        values.push(nom);
+    }
+    var liste = document.getElementById("pokemons");
 
-function fetchFaible(nompokemon){
-
-    var faible = 'faible='+nompokemon;
-    fetch('MH03.php', {
-        method: 'post',
-        body: faible,
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }       
-    })
-}
-
-function fetchFort(nompokemon){
-
-    var fort = 'faible='+nompokemon;
-    fetch('MH03.php', {
-        method: 'post',
-        body: fort,
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }       
-    })
-}*/
+    for (let i = 0; i < values.length; i++){
+        var val = values[i];
+        var option = document.createElement("option");
+        option.value = val;
+        pokemons.appendChild(option);
+    };
+})
