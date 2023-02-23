@@ -71,7 +71,7 @@ $(function () {
                         if (L.length != 0){
                             popup
                             .setLatLng(e.latlng)
-                            .setContent("<div id='div'><span id='text'> Nom de la ville </span> <div id='pokemons'> </div> </div> ")
+                            .setContent("<div id='container'><span id='text'> Nom de la ville </span> <div id='pokemons'> </div> </div> ")
                             .openOn(map);
                             document.getElementById('text').textContent= name_icon;
                             
@@ -87,7 +87,7 @@ $(function () {
                             console.log("Hopla");
                             popup
                             .setLatLng(e.latlng)
-                            .setContent("<div id='div'><span id='text'> Nom de la ville </span> <div id='pokemons'> </div> </div> ")
+                            .setContent("<div id='container'><span id='text'> Nom de la ville </span> <div id='pokemons'> </div> </div> ")
                             .openOn(map);
                             document.getElementById('text').textContent= name_icon;
                             var parag = document.createElement('p');
