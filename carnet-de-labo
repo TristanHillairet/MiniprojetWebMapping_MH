@@ -1,0 +1,21 @@
+Avancement par sessions de travail réalisée (une session équivaut à entre 2 et 4 heures de travail)
+
+--------------session1-------------------
+Réflexion sur la page HTML et des fonctionnalités nécéssaires pour respecter le CDG. Début de l'écriture de la page HTML.
+
+--------------session2-------------------
+Fin de l'écriture de la page HTML et organisation avec le CSS pour plus de clarté. Initialistaion de la carte de fond avec leaflet et prise en main des mécaniques
+disponibles avec les layers et les matkers.
+
+--------------session3-------------------
+Initialisation des markers sur la carte de base puis programmation de la dynamique des markers (listener nécéssaires avec click et mouseover).
+
+--------------session4-------------------
+Programmation de la sélection par input textuel de l'utilisateur puis écriture des fonctions dynamiques des boutons select et reset sur le js et le php.
+
+--------------session5-------------------
+Tentative de programmation d'une liste des 20 derniers pokémons sélectionnés et d'une liste déroulante dans la saisie textuelle. Résultats npn fonctionnel
+du coup programmation d'une liste se suggestion de pokémons pour la saisie texte.
+
+--------------session6-------------------
+Programmation des fonctions dynamiques des bouton strong et weak et finalisation du sujet en corrigeant quelques détails sur le CSS et le HTML
