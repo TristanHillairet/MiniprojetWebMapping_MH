@@ -17,7 +17,7 @@ Cahier des charges :
                      
 - 2 boutons Forts et Faibles devant afficher les Pokémons opposés à celui sélectionné.
 
------------------------------------------------------DESCRIPTION DU CONTENU----------------------------------------------------------- 
+----------------------------------------------------DESCRIPTION DU CONTENU---------------------------------------------------------- 
 
 Ce fichier contient :
 
