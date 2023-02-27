@@ -19,7 +19,7 @@ Cahier des charges :
 
 ----------------------------------------------------DESCRIPTION DU CONTENU---------------------------------------------------------- 
 
-Ce fichier contient :
+Ce dossier contient :
 
 Une page HTML sur laquelle on affiche un carte leaflet, une barre de saisie de texte et 4 boutons (Select, Reset, Strong, Weak) qui permettent respectivement de sélectionner un pokémon saisi, reset la sélection, sélectionner les pokémons faibles face au pokémon sélectionné, forts face au pokémon sélcetionné
 
