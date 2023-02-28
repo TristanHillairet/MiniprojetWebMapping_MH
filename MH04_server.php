@@ -6,6 +6,8 @@
 
     //Première requête: renvoie les 50 premiers résultats
     $sql = "SELECT * FROM pokemon_data LIMIT 50;";
+    //Pourquoi pas étendre la recherche à tous les resultats
+    //$sql = "SELECT * FROM pokemon_data;";
     $resultset = $connexion->prepare($sql);
     $resultset->execute();
 
